@@ -4,70 +4,87 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Improvement AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
+:root{--bg:#080c0a;--bg2:#0d1410;--bg3:#111a14;--border:#1a2e1e;--border2:#243d28;--green:#00e676;--green2:#00c853;--green3:#69f0ae;--gold:#ffd600;--text:#e8f5e9;--text2:#a5d6a7;--text3:#4a6e50}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:system-ui,sans-serif;background:#f8f9fa;color:#1a1a1a;min-height:100vh}
-.wrap{max-width:640px;margin:0 auto;padding:1.5rem 1rem}
-.logo{font-size:22px;font-weight:600;margin-bottom:4px}
-.logo span{color:#1D9E75}
-.tagline{font-size:13px;color:#666;margin-bottom:1.5rem;line-height:1.5}
-.tabs{display:flex;gap:4px;border-bottom:1px solid #e0e0e0;margin-bottom:1.25rem}
-.tab{font-size:13px;padding:8px 12px;cursor:pointer;border:none;background:none;color:#666;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
-.tab.active{color:#1D9E75;border-bottom-color:#1D9E75;font-weight:600}
+body{font-family:'DM Mono',monospace;background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 20% 0%,rgba(0,230,118,0.04) 0%,transparent 60%),radial-gradient(ellipse at 80% 100%,rgba(0,200,83,0.03) 0%,transparent 50%);pointer-events:none;z-index:0}
+.wrap{max-width:680px;margin:0 auto;padding:2rem 1.25rem;position:relative;z-index:1}
+.header{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.logo{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;letter-spacing:-0.5px;margin-bottom:6px}
+.logo-ai{color:var(--green);text-shadow:0 0 20px rgba(0,230,118,0.4)}
+.logo-dot{display:inline-block;width:6px;height:6px;background:var(--green);border-radius:50%;margin-left:3px;margin-bottom:2px;box-shadow:0 0 8px var(--green);animation:pulse 2s infinite;vertical-align:middle}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.tagline{font-size:12px;color:var(--text3);letter-spacing:0.05em;line-height:1.6}
+.tagline span{color:var(--green2)}
+.tabs{display:flex;gap:2px;margin-bottom:1.5rem;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:4px}
+.tab{flex:1;font-family:'DM Mono',monospace;font-size:12px;padding:8px 4px;cursor:pointer;border:none;background:none;color:var(--text3);border-radius:7px;transition:all .2s;white-space:nowrap}
+.tab:hover{color:var(--text2)}
+.tab.active{background:var(--bg3);color:var(--green);border:1px solid var(--border2);box-shadow:0 0 12px rgba(0,230,118,0.08)}
 .panel{display:none}
 .panel.active{display:block}
-.card{background:#fff;border:1px solid #e0e0e0;border-radius:12px;padding:1.25rem;margin-bottom:1rem}
-.label{font-size:11px;color:#999;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:1rem}
+.card:hover{border-color:var(--border2)}
+.label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;font-family:'Syne',sans-serif;font-weight:600}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1rem}
-.chip{font-size:12px;padding:5px 12px;border:1px solid #e0e0e0;border-radius:20px;background:#f8f9fa;color:#555;cursor:pointer;transition:all .15s}
-.chip:hover,.chip.sel{background:#E1F5EE;color:#0F6E56;border-color:#5DCAA5}
-textarea{width:100%;padding:10px 12px;font-size:14px;font-family:inherit;border:1px solid #e0e0e0;border-radius:8px;background:#fff;color:#1a1a1a;resize:vertical}
-textarea:focus{outline:none;border-color:#1D9E75}
-.btn{width:100%;padding:10px;font-size:14px;font-weight:600;background:#1D9E75;color:#fff;border:none;border-radius:8px;cursor:pointer;margin-top:10px}
-.btn:hover{background:#18876A}
-.btn:disabled{opacity:.45;cursor:not-allowed}
-.btn-sec{background:#f8f9fa;color:#1a1a1a;border:1px solid #e0e0e0}
-.btn-sec:hover{background:#f0f0f0}
-.res-card{background:#f8f9fa;border:1px solid #e0e0e0;border-radius:12px;padding:1.25rem;margin-top:1rem}
-.badge{display:inline-block;font-size:11px;padding:3px 10px;border-radius:20px;background:#E1F5EE;color:#0F6E56;margin-bottom:8px}
-.res-text{font-size:14px;color:#1a1a1a;line-height:1.7}
-.divider{border:none;border-top:1px solid #e0e0e0;margin:12px 0}
-.sec-label{font-size:11px;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
-.sec-text{font-size:13px;color:#555;line-height:1.6}
-.loading{text-align:center;padding:1.25rem;font-size:13px;color:#999}
-.dot{display:inline-block;animation:blink 1.2s infinite}
+.chip{font-size:11px;padding:5px 12px;border:1px solid var(--border2);border-radius:6px;background:transparent;color:var(--text3);cursor:pointer;transition:all .15s;font-family:'DM Mono',monospace}
+.chip:hover{border-color:var(--green3);color:var(--green3);background:rgba(0,230,118,0.05)}
+.chip.sel{border-color:var(--green);color:var(--green);background:rgba(0,230,118,0.08)}
+textarea{width:100%;padding:12px;font-size:13px;font-family:'DM Mono',monospace;border:1px solid var(--border);border-radius:8px;background:var(--bg3);color:var(--text);resize:vertical;line-height:1.6}
+textarea:focus{outline:none;border-color:var(--green2);box-shadow:0 0 0 3px rgba(0,230,118,0.06)}
+textarea::placeholder{color:var(--text3)}
+.btn{width:100%;padding:12px;font-size:13px;font-weight:700;font-family:'Syne',sans-serif;background:var(--green);color:#000;border:none;border-radius:8px;cursor:pointer;margin-top:12px;letter-spacing:0.08em;transition:all .2s}
+.btn:hover{background:var(--green3);box-shadow:0 0 20px rgba(0,230,118,0.3)}
+.btn:disabled{opacity:.3;cursor:not-allowed;box-shadow:none}
+.btn-sec{background:transparent;color:var(--text2);border:1px solid var(--border2)}
+.btn-sec:hover{background:rgba(0,230,118,0.05);box-shadow:none}
+.res-card{background:var(--bg3);border:1px solid var(--border2);border-radius:12px;padding:1.25rem;margin-top:1rem;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.badge{display:inline-block;font-size:10px;padding:3px 10px;border-radius:4px;background:rgba(0,230,118,0.1);color:var(--green);border:1px solid rgba(0,230,118,0.2);margin-bottom:10px;letter-spacing:0.08em;font-family:'Syne',sans-serif;font-weight:600;text-transform:uppercase}
+.res-text{font-size:13px;color:var(--text);line-height:1.8}
+.divider{border:none;border-top:1px solid var(--border);margin:14px 0}
+.sec-label{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;font-family:'Syne',sans-serif}
+.sec-text{font-size:12px;color:var(--text2);line-height:1.7}
+.loading{text-align:center;padding:1.5rem;font-size:12px;color:var(--text3);letter-spacing:0.05em}
+.dot{display:inline-block;animation:blink 1.2s infinite;color:var(--green)}
 .dot:nth-child(2){animation-delay:.2s}
 .dot:nth-child(3){animation-delay:.4s}
 @keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:1}}
 .hidden{display:none}
 .step{display:none}
 .step.active{display:block}
-.sdots{display:flex;gap:6px;margin-bottom:1.25rem}
-.sd{width:6px;height:6px;border-radius:50%;background:#e0e0e0;transition:background .2s}
-.sd.active{background:#1D9E75}
-.sd.done{background:#5DCAA5}
-.mentor-card{background:#fff;border:1px solid #e0e0e0;border-radius:12px;padding:1rem;margin-top:.75rem}
-.mentor-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
-.mentor-tag{font-size:11px;padding:2px 8px;border-radius:12px;background:#f8f9fa;color:#555}
-.sim-wrap{display:flex;flex-direction:column;max-height:380px;overflow-y:auto;padding:4px 0;margin-bottom:8px}
-.msg{padding:.75rem 1rem;border-radius:12px;font-size:14px;line-height:1.6;max-width:88%;margin-bottom:6px}
-.msg-client{background:#f0f0f0;color:#1a1a1a;align-self:flex-start;border-bottom-left-radius:4px}
-.msg-seller{background:#E1F5EE;color:#085041;margin-left:auto;border-bottom-right-radius:4px}
-.msg-wrap-c{display:flex;flex-direction:column;align-items:flex-start;margin-bottom:4px}
-.msg-wrap-s{display:flex;flex-direction:column;align-items:flex-end;margin-bottom:4px}
-.msg-coach{background:#fff;border:1px solid #5DCAA5;border-left:3px solid #1D9E75;border-radius:8px;padding:.75rem 1rem;margin-bottom:8px;font-size:13px;color:#1a1a1a;line-height:1.6}
-.msg-label{font-size:11px;color:#999;margin-bottom:3px}
-.sim-input-row{display:flex;gap:8px;margin-top:4px}
+.sdots{display:flex;gap:8px;margin-bottom:1.25rem}
+.sd{width:6px;height:6px;border-radius:50%;background:var(--border2);transition:all .3s}
+.sd.active{background:var(--green);box-shadow:0 0 6px var(--green)}
+.sd.done{background:var(--green2)}
+.mentor-card{background:var(--bg2);border:1px solid var(--border2);border-left:3px solid var(--green);border-radius:12px;padding:1.25rem;margin-top:1rem;animation:fadeIn .3s ease}
+.mentor-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.mentor-tag{font-size:10px;padding:3px 10px;border-radius:4px;background:rgba(0,230,118,0.06);color:var(--green2);border:1px solid rgba(0,230,118,0.15)}
+.sim-wrap{display:flex;flex-direction:column;max-height:400px;overflow-y:auto;padding:4px 0;margin-bottom:10px;scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
+.msg{padding:.75rem 1rem;border-radius:10px;font-size:13px;line-height:1.7;max-width:88%}
+.msg-client{background:var(--bg3);color:var(--text2);border:1px solid var(--border);border-bottom-left-radius:3px}
+.msg-seller{background:rgba(0,230,118,0.1);color:var(--green3);border:1px solid rgba(0,230,118,0.2);border-bottom-right-radius:3px;margin-left:auto}
+.msg-wrap-c{display:flex;flex-direction:column;align-items:flex-start;margin-bottom:8px}
+.msg-wrap-s{display:flex;flex-direction:column;align-items:flex-end;margin-bottom:8px}
+.msg-coach{background:rgba(255,214,0,0.04);border:1px solid rgba(255,214,0,0.15);border-left:3px solid var(--gold);border-radius:8px;padding:.75rem 1rem;margin-bottom:10px;font-size:12px;color:#fff9c4;line-height:1.7}
+.msg-label{font-size:10px;letter-spacing:0.08em;margin-bottom:4px;font-family:'Syne',sans-serif;font-weight:600;text-transform:uppercase}
+.sim-input-row{display:flex;gap:8px;margin-top:6px}
 .sim-input-row textarea{min-height:52px;flex:1;margin:0}
-.sim-send{padding:0 16px;background:#1D9E75;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;white-space:nowrap}
-.sim-send:disabled{opacity:.45;cursor:not-allowed}
-.nota{font-size:12px;color:#999;text-align:center;margin-top:1rem}
+.sim-send{padding:0 18px;background:var(--green);color:#000;border:none;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700;font-family:'Syne',sans-serif;white-space:nowrap;transition:all .2s;letter-spacing:0.05em}
+.sim-send:hover{background:var(--green3);box-shadow:0 0 15px rgba(0,230,118,0.3)}
+.sim-send:disabled{opacity:.3;cursor:not-allowed}
+.info-box{background:var(--bg3);border:1px solid var(--border);border-left:2px solid var(--green);border-radius:8px;padding:.75rem 1rem;font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:1rem}
+.nota{font-size:10px;color:var(--text3);text-align:center;margin-top:1.5rem;letter-spacing:0.08em;font-family:'Syne',sans-serif}
+.mentor-avatar{width:36px;height:36px;border-radius:8px;background:rgba(0,230,118,0.1);border:1px solid rgba(0,230,118,0.2);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;color:var(--green);flex-shrink:0}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="logo">Improvement<span>AI</span></div>
-  <div class="tagline">Addestrata su Elliott, Hormozi, Dang, Miner, Belfort, Cardone.</div>
+  <div class="header">
+    <div class="logo"><span>Improvement</span><span class="logo-ai">AI</span><span class="logo-dot"></span></div>
+    <div class="tagline">Addestrata su <span>Elliott · Hormozi · Dang · Miner · Belfort · Cardone</span><br>La tua arma segreta per chiudere più deal.</div>
+  </div>
   <div class="tabs">
     <button class="tab active" onclick="switchTab('obiez')">Obiezioni</button>
     <button class="tab" onclick="switchTab('sim')">Simulatore</button>
@@ -87,18 +104,18 @@ textarea:focus{outline:none;border-color:#1D9E75}
         <div class="chip" onclick="setObj(this,'Non ho il budget')">Non ho il budget</div>
       </div>
       <div class="label">Scrivi l'obiezione</div>
-      <textarea id="obj-input" style="min-height:70px" placeholder="Es: il cliente dice che vuole aspettare..."></textarea>
-      <div class="label" style="margin-top:10px">Contesto (opzionale)</div>
-      <textarea id="obj-ctx" style="min-height:50px" placeholder="Es: vendita face to face, settore chimico..."></textarea>
-      <button class="btn" id="obj-btn" onclick="getObj()">Genera risposta</button>
+      <textarea id="obj-input" style="min-height:72px" placeholder="Es: il cliente dice che vuole aspettare il mese prossimo..."></textarea>
+      <div class="label" style="margin-top:12px">Contesto (opzionale)</div>
+      <textarea id="obj-ctx" style="min-height:52px" placeholder="Es: vendita face to face, settore chimico..."></textarea>
+      <button class="btn" id="obj-btn" onclick="getObj()">→ GENERA RISPOSTA</button>
     </div>
-    <div class="loading hidden" id="obj-load"><span class="dot">•</span><span class="dot">•</span><span class="dot">•</span><span style="margin-left:6px">Consultando i migliori venditori...</span></div>
+    <div class="loading hidden" id="obj-load"><span class="dot">▮</span><span class="dot">▮</span><span class="dot">▮</span><span style="margin-left:8px">consultando elliott · hormozi · miner...</span></div>
     <div class="res-card hidden" id="obj-res">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-        <div style="width:30px;height:30px;border-radius:50%;background:#E1F5EE;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#0F6E56">AI</div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <div class="mentor-avatar" id="r-avatar">AI</div>
         <div>
-          <div style="font-size:14px;font-weight:600;color:#1a1a1a" id="r-mentor"></div>
-          <div style="font-size:12px;color:#666" id="r-style"></div>
+          <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text)" id="r-mentor"></div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px" id="r-style"></div>
         </div>
       </div>
       <div class="badge" id="r-tech"></div>
@@ -113,7 +130,7 @@ textarea:focus{outline:none;border-color:#1D9E75}
   </div>
   <div id="tab-sim" class="panel">
     <div class="card" id="sim-setup">
-      <div class="label">Che cliente vuoi simulare?</div>
+      <div class="label">Tipo di cliente da simulare</div>
       <div class="chips" id="chips-sim">
         <div class="chip" onclick="selSim(this,'cliente B2B nel settore industriale, diffidente e occupato')">B2B industriale</div>
         <div class="chip" onclick="selSim(this,'privato sensibile al prezzo che valuta un acquisto importante')">Privato sensibile</div>
@@ -121,32 +138,32 @@ textarea:focus{outline:none;border-color:#1D9E75}
         <div class="chip" onclick="selSim(this,'cliente fidelizzato a un concorrente difficile da spostare')">Fidelizzato concorrente</div>
         <div class="chip" onclick="selSim(this,'decision maker aziendale formale che vuole dati e prove')">Decision maker</div>
       </div>
-      <div class="label" style="margin-top:8px">Oppure descrivi il tuo cliente</div>
+      <div class="label" style="margin-top:10px">Oppure descrivi il tuo cliente</div>
       <textarea id="sim-ctx-input" style="min-height:60px" placeholder="Es: ristoratore 45 anni, ha già un fornitore..."></textarea>
-      <button class="btn" id="sim-start-btn" disabled onclick="startSim()">Inizia simulazione</button>
+      <button class="btn" id="sim-start-btn" disabled onclick="startSim()">→ INIZIA SIMULAZIONE</button>
     </div>
     <div class="hidden" id="sim-area">
-      <div style="background:#f0f0f0;border-radius:8px;padding:.65rem 1rem;margin-bottom:10px;font-size:13px;color:#555">Trattativa in corso. Dopo ogni risposta ricevi il feedback del Coach AI.</div>
+      <div class="info-box">Trattativa in corso — rispondi al cliente. Dopo ogni scambio ricevi il feedback del Coach AI.</div>
       <div class="sim-wrap" id="sim-messages"></div>
-      <div class="loading hidden" id="sim-load"><span class="dot">•</span><span class="dot">•</span><span class="dot">•</span><span style="margin-left:6px">Il cliente sta rispondendo...</span></div>
+      <div class="loading hidden" id="sim-load"><span class="dot">▮</span><span class="dot">▮</span><span class="dot">▮</span><span style="margin-left:8px">il cliente sta rispondendo...</span></div>
       <div class="sim-input-row">
         <textarea id="sim-input" style="min-height:52px" placeholder="Scrivi la tua risposta..."></textarea>
-        <button class="sim-send" id="sim-send" onclick="sendSim()">Invia</button>
+        <button class="sim-send" id="sim-send" onclick="sendSim()">INVIA</button>
       </div>
-      <button class="btn btn-sec" style="margin-top:8px" onclick="resetSim()">Nuova simulazione</button>
+      <button class="btn btn-sec" style="margin-top:10px" onclick="resetSim()">↩ NUOVA SIMULAZIONE</button>
     </div>
   </div>
   <div id="tab-analisi" class="panel">
     <div class="card">
       <div class="label">Come funziona</div>
-      <div style="font-size:13px;color:#555;line-height:1.6;margin-bottom:1rem">1. Registra la trattativa col memo vocale<br>2. Copia e incolla il testo qui sotto<br>3. Ricevi analisi completa con voto e consigli</div>
+      <div class="info-box">1. Registra la trattativa col memo vocale (iPhone) o qualsiasi app di trascrizione<br>2. Copia e incolla il testo qui sotto<br>3. Ricevi analisi completa con voto e consigli specifici</div>
       <div class="label">Incolla la trascrizione</div>
-      <textarea id="call-input" style="min-height:130px" placeholder="Venditore: buongiorno...&#10;Cliente: sì volevo sapere..."></textarea>
-      <button class="btn" id="call-btn" onclick="analyzeCall()">Analizza la chiamata</button>
+      <textarea id="call-input" style="min-height:140px" placeholder="Venditore: buongiorno...&#10;Cliente: sì volevo sapere..."></textarea>
+      <button class="btn" id="call-btn" onclick="analyzeCall()">→ ANALIZZA LA CHIAMATA</button>
     </div>
-    <div class="loading hidden" id="call-load"><span class="dot">•</span><span class="dot">•</span><span class="dot">•</span><span style="margin-left:6px">Analizzando...</span></div>
+    <div class="loading hidden" id="call-load"><span class="dot">▮</span><span class="dot">▮</span><span class="dot">▮</span><span style="margin-left:8px">analizzando la trattativa...</span></div>
     <div class="res-card hidden" id="call-res">
-      <div style="font-size:14px;font-weight:600;margin-bottom:12px">Analisi della trattativa</div>
+      <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:14px;color:var(--green)">// ANALISI TRATTATIVA</div>
       <div class="res-text" id="call-resp"></div>
     </div>
   </div>
@@ -154,17 +171,17 @@ textarea:focus{outline:none;border-color:#1D9E75}
     <div class="card">
       <div class="sdots"><div class="sd active" id="sd1"></div><div class="sd" id="sd2"></div><div class="sd" id="sd3"></div></div>
       <div class="step active" id="step1">
-        <div class="label">Che tipo di vendita fai?</div>
+        <div class="label">Tipo di vendita</div>
         <div class="chips">
           <div class="chip" onclick="selProf(this,'tipo','Face to face, vado dai clienti')">Face to face</div>
           <div class="chip" onclick="selProf(this,'tipo','Inside sales, i clienti vengono da me')">Inside sales</div>
           <div class="chip" onclick="selProf(this,'tipo','Telefono o video call')">Telefono / video</div>
           <div class="chip" onclick="selProf(this,'tipo','Online')">Online</div>
         </div>
-        <button class="btn" id="btn1" disabled onclick="goStep(2)">Avanti</button>
+        <button class="btn" id="btn1" disabled onclick="goStep(2)">→ AVANTI</button>
       </div>
       <div class="step" id="step2">
-        <div class="label">Come ti comporti in trattativa?</div>
+        <div class="label">Il tuo stile in trattativa</div>
         <div class="chips">
           <div class="chip" onclick="selProf(this,'stile','Energico e diretto')">Energico e diretto</div>
           <div class="chip" onclick="selProf(this,'stile','Calmo, faccio domande')">Calmo, ascolto</div>
@@ -172,36 +189,35 @@ textarea:focus{outline:none;border-color:#1D9E75}
           <div class="chip" onclick="selProf(this,'stile','Analitico, spiego il valore')">Analitico</div>
           <div class="chip" onclick="selProf(this,'stile','Mi adatto')">Mi adatto</div>
         </div>
-        <button class="btn" id="btn2" disabled onclick="goStep(3)">Avanti</button>
+        <button class="btn" id="btn2" disabled onclick="goStep(3)">→ AVANTI</button>
       </div>
       <div class="step" id="step3">
-        <div class="label">Ticket medio?</div>
+        <div class="label">Ticket medio per deal</div>
         <div class="chips">
           <div class="chip" onclick="selProf(this,'ticket','sotto 500 euro')">Sotto €500</div>
           <div class="chip" onclick="selProf(this,'ticket','500-2000 euro')">€500–€2.000</div>
           <div class="chip" onclick="selProf(this,'ticket','2000-10000 euro')">€2.000–€10.000</div>
           <div class="chip" onclick="selProf(this,'ticket','oltre 10000 euro')">Oltre €10.000</div>
         </div>
-        <button class="btn" id="btn3" disabled onclick="buildProfile()">Scopri il tuo mentore</button>
+        <button class="btn" id="btn3" disabled onclick="buildProfile()">→ SCOPRI IL TUO MENTORE</button>
       </div>
     </div>
-    <div class="loading hidden" id="prof-load"><span class="dot">•</span><span class="dot">•</span><span class="dot">•</span><span style="margin-left:6px">Analizzando...</span></div>
+    <div class="loading hidden" id="prof-load"><span class="dot">▮</span><span class="dot">▮</span><span class="dot">▮</span><span style="margin-left:8px">analizzando il profilo...</span></div>
     <div class="mentor-card hidden" id="mentor-out">
-      <div style="font-size:11px;color:#999;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Il tuo mentore</div>
-      <div style="font-size:15px;font-weight:600" id="m-name"></div>
-      <div style="font-size:13px;color:#555;margin-top:4px;line-height:1.5" id="m-desc"></div>
+      <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;font-family:'Syne',sans-serif;font-weight:600">// Il tuo mentore</div>
+      <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--green)" id="m-name"></div>
+      <div style="font-size:12px;color:var(--text2);margin-top:6px;line-height:1.7" id="m-desc"></div>
       <div class="mentor-tags" id="m-tags"></div>
-      <div class="divider" style="margin:12px 0"></div>
-      <div style="font-size:13px;color:#555;line-height:1.6" id="m-advice"></div>
+      <div class="divider" style="margin:14px 0"></div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.7" id="m-advice"></div>
     </div>
   </div>
-  <div class="nota">Improvement AI · €25/mese · Elliott, Hormozi, Dang, Miner, Belfort, Cardone</div>
+  <div class="nota">IMPROVEMENT AI · €25/MESE · ELLIOTT · HORMOZI · DANG · MINER · BELFORT · CARDONE</div>
 </div>
 <script>
 const prof={tipo:'',stile:'',ticket:''};
 let simCtx='';
 let simHistory=[];
-
 function switchTab(id){
   document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['obiez','sim','analisi','profilo'][i]===id));
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
@@ -214,8 +230,7 @@ function setObj(el,txt){
 }
 function selSim(el,val){
   document.querySelectorAll('#chips-sim .chip').forEach(c=>c.classList.remove('sel'));
-  el.classList.add('sel');
-  simCtx=val;
+  el.classList.add('sel');simCtx=val;
   document.getElementById('sim-ctx-input').value='';
   document.getElementById('sim-start-btn').disabled=false;
 }
@@ -248,10 +263,12 @@ async function getObj(){
   const res=document.getElementById('obj-res');
   btn.disabled=true;load.classList.remove('hidden');res.classList.add('hidden');
   const profCtx=prof.tipo?`Venditore: ${prof.tipo}, stile ${prof.stile}, ticket ${prof.ticket}.`:'';
-  const prompt=`Sei esperto delle tecniche di Andy Elliott, Alex Hormozi, Patrick Dang, Jeremy Miner, Jordan Belfort e Grant Cardone. Un venditore italiano deve rispondere: "${obj}"${ctx?`. Contesto: ${ctx}`:''}. ${profCtx} Usa tecniche reali (Ghost Product Hormozi, Disarmo Elliott, Deframing Miner, Loop Belfort, Matematica Cardone, Dolore Dang). Rispondi SOLO JSON senza backtick: {"mentor":"nome venditore","style":"stile 3 parole","technique":"tecnica specifica","response":"risposta italiana 2-4 frasi","why":"perche funziona 1-2 frasi","next":"prossima mossa 1 frase"}`;
+  const prompt=`Sei esperto delle tecniche di Andy Elliott, Alex Hormozi, Patrick Dang, Jeremy Miner, Jordan Belfort e Grant Cardone. Un venditore italiano deve rispondere: "${obj}"${ctx?`. Contesto: ${ctx}`:''}. ${profCtx} Usa tecniche reali. Rispondi SOLO JSON senza backtick: {"mentor":"nome venditore","style":"stile 3 parole","technique":"tecnica specifica","response":"risposta italiana 2-4 frasi dirette","why":"perche funziona 1-2 frasi","next":"prossima mossa 1 frase"}`;
   try{
     const text=(await callAPI([{role:'user',content:prompt}])).replace(/```json|```/g,'').trim();
     const p=JSON.parse(text);
+    const initials=p.mentor.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    document.getElementById('r-avatar').textContent=initials;
     document.getElementById('r-mentor').textContent=p.mentor;
     document.getElementById('r-style').textContent=p.style;
     document.getElementById('r-tech').textContent=p.technique;
@@ -259,11 +276,8 @@ async function getObj(){
     document.getElementById('r-why').textContent=p.why;
     document.getElementById('r-next').textContent=p.next;
     res.classList.remove('hidden');
-  }catch(e){
-    alert('Errore. Riprova.');
-  }finally{
-    load.classList.add('hidden');btn.disabled=false;
-  }
+  }catch(e){alert('Errore. Riprova.');}
+  finally{load.classList.add('hidden');btn.disabled=false;}
 }
 async function startSim(){
   if(!simCtx)return;
@@ -273,12 +287,12 @@ async function startSim(){
   document.getElementById('sim-area').classList.remove('hidden');
   document.getElementById('sim-load').classList.remove('hidden');
   document.getElementById('sim-send').disabled=true;
-  const prompt=`Sei un cliente italiano: ${simCtx}. Inizia la conversazione con una frase breve e naturale, leggermente diffidente. Rispondi SOLO come il cliente.`;
+  const prompt=`Sei un cliente italiano: ${simCtx}. Inizia con una frase breve e naturale, leggermente diffidente. Rispondi SOLO come il cliente.`;
   try{
     const msg=await callAPI([{role:'user',content:prompt}],200);
     simHistory=[{role:'assistant',content:msg}];
     addMsg('cliente',msg);
-  }catch(e){addMsg('cliente','Buongiorno, mi dica.');}
+  }catch(e){const f='Buongiorno, mi dica.';simHistory=[{role:'assistant',content:f}];addMsg('cliente',f);}
   finally{document.getElementById('sim-load').classList.add('hidden');document.getElementById('sim-send').disabled=false;}
 }
 async function sendSim(){
@@ -291,12 +305,11 @@ async function sendSim(){
   addMsg('venditore',msg);
   simHistory.push({role:'user',content:msg});
   try{
-    const sysMsg=`Sei un cliente italiano: ${simCtx}. Reagisci in modo realistico, fai obiezioni concrete. Rispondi SOLO come cliente, 1-3 frasi.`;
-    const msgs=[{role:'user',content:sysMsg},...simHistory];
-    const clientReply=await callAPI(msgs,200);
+    const sysMsg=`Sei un cliente italiano: ${simCtx}. Reagisci in modo realistico, fai obiezioni concrete. SOLO come cliente, 1-3 frasi.`;
+    const clientReply=await callAPI([{role:'user',content:sysMsg},...simHistory],200);
     simHistory.push({role:'assistant',content:clientReply});
     addMsg('cliente',clientReply);
-    const coachPrompt=`Sei coach di vendita esperto di Elliott, Hormozi, Dang, Miner. Venditore: "${msg}". Cliente: "${clientReply}". Feedback italiano 2-3 frasi: cosa ha fatto bene, cosa dire meglio con esempio concreto, prossima mossa.`;
+    const coachPrompt=`Sei coach di vendita esperto di Elliott, Hormozi, Dang, Miner. Venditore: "${msg}". Cliente: "${clientReply}". Feedback italiano 2-3 frasi: cosa ha fatto bene, cosa dire meglio con esempio, prossima mossa.`;
     const coachReply=await callAPI([{role:'user',content:coachPrompt}],300);
     addCoach(coachReply);
   }catch(e){addCoach('Errore. Riprova.');}
@@ -305,14 +318,14 @@ async function sendSim(){
 function addMsg(who,text){
   const wrap=document.getElementById('sim-messages');
   const el=document.createElement('div');
-  if(who==='cliente'){el.className='msg-wrap-c';el.innerHTML=`<div class="msg-label">Cliente</div><div class="msg msg-client">${text}</div>`;}
-  else{el.className='msg-wrap-s';el.innerHTML=`<div class="msg-label" style="text-align:right;color:#0F6E56">Tu</div><div class="msg msg-seller">${text}</div>`;}
+  if(who==='cliente'){el.className='msg-wrap-c';el.innerHTML=`<div class="msg-label" style="color:var(--text3)">cliente</div><div class="msg msg-client">${text}</div>`;}
+  else{el.className='msg-wrap-s';el.innerHTML=`<div class="msg-label" style="text-align:right;color:var(--green2)">tu</div><div class="msg msg-seller">${text}</div>`;}
   wrap.appendChild(el);wrap.scrollTop=wrap.scrollHeight;
 }
 function addCoach(text){
   const wrap=document.getElementById('sim-messages');
   const el=document.createElement('div');
-  el.innerHTML=`<div class="msg-label" style="color:#1D9E75">Coach AI</div><div class="msg-coach">${text}</div>`;
+  el.innerHTML=`<div class="msg-label" style="color:#ffd600;font-size:10px">// coach ai</div><div class="msg-coach">${text}</div>`;
   wrap.appendChild(el);wrap.scrollTop=wrap.scrollHeight;
 }
 function resetSim(){
@@ -331,21 +344,21 @@ async function analyzeCall(){
   const load=document.getElementById('call-load');
   const res=document.getElementById('call-res');
   btn.disabled=true;load.classList.remove('hidden');res.classList.add('hidden');
-  const prompt=`Sei coach di vendita esperto di Elliott, Hormozi, Dang, Miner, Belfort, Cardone. Analizza questa trattativa italiana:\n\n"${call}"\n\nAnalisi strutturata:\n1. PUNTI DI FORZA (max 3)\n2. OPPORTUNITA MANCATE con frase esatta che avrebbe dovuto dire\n3. GESTIONE OBIEZIONI\n4. VOTO da 1 a 10\n5. COSA ALLENARE QUESTA SETTIMANA`;
+  const prompt=`Sei coach di vendita esperto di Elliott, Hormozi, Dang, Miner, Belfort, Cardone. Analizza questa trattativa italiana:\n\n"${call}"\n\n1. PUNTI DI FORZA (max 3)\n2. OPPORTUNITA MANCATE con frase esatta che avrebbe dovuto dire\n3. GESTIONE OBIEZIONI\n4. VOTO da 1 a 10\n5. COSA ALLENARE QUESTA SETTIMANA`;
   try{
     const text=await callAPI([{role:'user',content:prompt}],1500);
-    document.getElementById('call-resp').innerHTML=text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+    document.getElementById('call-resp').innerHTML=text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<span style="color:var(--green);font-weight:500">$1</span>');
     res.classList.remove('hidden');
   }catch(e){alert('Errore. Riprova.');}
   finally{load.classList.add('hidden');btn.disabled=false;}
 }
 function buildProfile(){
   const mentors={
-    'Elliott':{name:'Andy Elliott',desc:'Il tuo stile è vicino ad Andy Elliott — energia alta, presenza forte, vai dritto al punto.',tags:['Face to face','Autorità immediata','Upsell istantaneo','Disarmo'],advice:'Allena il disarmo: concorda sempre prima di controbattere. Studia il Rabbit Hole — porta il cliente a darti informazioni che lo impegnano inconsciamente.'},
-    'Miner':{name:'Jeremy Miner',desc:'Il tuo profilo ricorda Jeremy Miner — calmo, porti il cliente a convincersi da solo.',tags:['Domande NEPQ','Deframing','6 livelli','Zero pressione'],advice:'Scava sempre 6 livelli prima di proporre qualsiasi soluzione. Chi ci arriva da solo, compra da solo.'},
-    'Dang':{name:'Patrick Dang',desc:'Simile a Patrick Dang — sai costruire rapport e chiudere in modo naturale.',tags:['Psicologia del dolore','Chiusura silenziosa','B2B e B2C','Script precisi'],advice:'Padroneggia la chiusura silenziosa: dici il prezzo con certezza, poi stai zitto. Chi parla per primo perde.'},
-    'Hormozi':{name:'Alex Hormozi',desc:'Il tuo approccio analitico ricorda Alex Hormozi — costruisci credibilità prima di vendere.',tags:['Ghost product','Fiducia','Valore prima del prezzo','Prescrizione'],advice:'Implementa il Ghost Product: indica sempre una cosa che il cliente può trovare altrove per meno. Quel gesto vale più di qualsiasi script.'},
-    'Cardone':{name:'Grant Cardone',desc:'Il tuo stile adattivo ricorda Grant Cardone — sai leggere la stanza.',tags:['Pre-close','Matematica semplice','Lock','Decisioni veloci'],advice:'Usa la matematica per semplificare il goal del cliente. Poi fai sempre il lock: "C\'è qualche motivo per cui potresti cambiare idea?"'}
+    'Elliott':{name:'Andy Elliott',desc:'Energia alta, presenza forte, vai dritto al punto. Sei nato per il face to face.',tags:['Disarmo obiezioni','Rabbit Hole','Upsell istantaneo','Autorità fisica'],advice:'Allena il disarmo: concorda SEMPRE prima di controbattere. "Certo che devi pensarci — non ti ho ancora dato abbastanza informazioni per non doverci pensare." Poi porta dentro.'},
+    'Miner':{name:'Jeremy Miner',desc:'Calmo, metodico, porti il cliente a convincersi da solo con domande strategiche.',tags:['NEPQ','Deframing','6 livelli','Zero pressione'],advice:'Scava 6 livelli prima di proporre qualsiasi soluzione. Chi ci arriva da solo, compra da solo.'},
+    'Dang':{name:'Patrick Dang',desc:'Sai costruire rapport genuino e chiudere in modo naturale senza forzare.',tags:['Psicologia del dolore','Chiusura silenziosa','Script precisi','B2B e B2C'],advice:'Padroneggia la chiusura silenziosa: dici il prezzo con certezza assoluta, poi stai zitto. Chi parla per primo rivela la vera obiezione.'},
+    'Hormozi':{name:'Alex Hormozi',desc:'Approccio analitico — costruisci credibilità prima ancora di vendere.',tags:['Ghost product','Valore prima del prezzo','Prescrizione','Fiducia'],advice:'Implementa il Ghost Product oggi: in ogni trattativa indica una cosa che il cliente può trovare altrove per meno. Quel gesto vale più di qualsiasi script.'},
+    'Cardone':{name:'Grant Cardone',desc:'Stile adattivo, sai leggere la stanza e calibrarti su qualsiasi interlocutore.',tags:['4 check pre-close','Matematica semplice','Lock del close','Velocità decisionale'],advice:'Prima di ogni close fai il lock: "C\'è qualche motivo per cui potresti cambiare idea?" Blocca il ripensamento prima che succeda.'}
   };
   const map={'Energico e diretto':'Elliott','Calmo, faccio domande':'Miner','Costruisco rapport':'Dang','Analitico, spiego il valore':'Hormozi','Mi adatto':'Cardone'};
   const key=map[prof.stile]||'Dang';
@@ -358,7 +371,7 @@ function buildProfile(){
     document.getElementById('m-tags').innerHTML=m.tags.map(x=>`<span class="mentor-tag">${x}</span>`).join('');
     document.getElementById('m-advice').textContent=m.advice;
     document.getElementById('mentor-out').classList.remove('hidden');
-  },700);
+  },800);
 }
 </script>
 </body>
