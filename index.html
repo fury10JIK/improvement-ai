@@ -77,10 +77,33 @@ textarea::placeholder{color:var(--text3)}
 .info-box{background:var(--bg3);border:1px solid var(--border);border-left:2px solid var(--green);border-radius:8px;padding:.75rem 1rem;font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:1rem}
 .nota{font-size:10px;color:var(--text3);text-align:center;margin-top:1.5rem;letter-spacing:0.08em;font-family:'Syne',sans-serif}
 .mentor-avatar{width:36px;height:36px;border-radius:8px;background:rgba(0,230,118,0.1);border:1px solid rgba(0,230,118,0.2);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;color:var(--green);flex-shrink:0}
+#login-screen{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:100;padding:1.25rem}
+.login-box{width:100%;max-width:380px;background:var(--bg2);border:1px solid var(--border2);border-radius:16px;padding:2rem;text-align:center}
+.login-logo{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;margin-bottom:6px}
+.login-sub{font-size:12px;color:var(--text3);margin-bottom:2rem;line-height:1.6;letter-spacing:0.03em}
+.login-input{width:100%;padding:12px;font-size:14px;font-family:'DM Mono',monospace;border:1px solid var(--border2);border-radius:8px;background:var(--bg3);color:var(--text);text-align:center;letter-spacing:0.1em;margin-bottom:4px}
+.login-input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(0,230,118,0.08)}
+.login-input::placeholder{color:var(--text3);letter-spacing:0.05em}
+.login-error{font-size:11px;color:#ff5252;margin-bottom:8px;min-height:16px;letter-spacing:0.03em}
+.login-btn{width:100%;padding:12px;font-size:13px;font-weight:700;font-family:'Syne',sans-serif;background:var(--green);color:#000;border:none;border-radius:8px;cursor:pointer;letter-spacing:0.08em;transition:all .2s;margin-top:4px}
+.login-btn:hover{background:var(--green3);box-shadow:0 0 20px rgba(0,230,118,0.3)}
+.login-note{font-size:11px;color:var(--text3);margin-top:1.25rem;line-height:1.6}
 </style>
 </head>
 <body>
-<div class="wrap">
+
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo"><span>Improvement</span><span class="logo-ai">AI</span></div>
+    <div class="login-sub">Inserisci il tuo codice di accesso<br>per entrare nella piattaforma</div>
+    <input class="login-input" id="login-input" type="text" placeholder="IMP-XXXX-XXXX" autocomplete="off" spellcheck="false">
+    <div class="login-error" id="login-error"></div>
+    <button class="login-btn" onclick="doLogin()">→ ACCEDI</button>
+    <div class="login-note">Non hai un codice? Acquista l'accesso su Whop.</div>
+  </div>
+</div>
+
+<div class="wrap" id="main-app" style="display:none">
   <div class="header">
     <div class="logo"><span>Improvement</span><span class="logo-ai">AI</span><span class="logo-dot"></span></div>
     <div class="tagline">Addestrata su <span>Elliott · Hormozi · Dang · Miner · Belfort · Cardone</span><br>La tua arma segreta per chiudere più deal.</div>
@@ -214,7 +237,35 @@ textarea::placeholder{color:var(--text3)}
   </div>
   <div class="nota">IMPROVEMENT AI · €25/MESE · ELLIOTT · HORMOZI · DANG · MINER · BELFORT · CARDONE</div>
 </div>
+
 <script>
+const VALID_CODES=['IMP-2025-ALFA','IMP-2025-BETA','IMP-2025-GAMMA','IMP-2025-DELTA','IMP-2025-TEST'];
+
+function doLogin(){
+  const code=document.getElementById('login-input').value.trim().toUpperCase();
+  if(VALID_CODES.includes(code)){
+    localStorage.setItem('imp_access',code);
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('main-app').style.display='block';
+  }else{
+    document.getElementById('login-error').textContent='Codice non valido. Controlla e riprova.';
+    document.getElementById('login-input').style.borderColor='#ff5252';
+    setTimeout(()=>{document.getElementById('login-input').style.borderColor='';},2000);
+  }
+}
+
+document.getElementById('login-input').addEventListener('keydown',function(e){
+  if(e.key==='Enter')doLogin();
+});
+
+window.addEventListener('load',function(){
+  const saved=localStorage.getItem('imp_access');
+  if(saved&&VALID_CODES.includes(saved)){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('main-app').style.display='block';
+  }
+});
+
 const prof={tipo:'',stile:'',ticket:''};
 let simCtx='';
 let simHistory=[];
