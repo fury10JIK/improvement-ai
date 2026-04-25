@@ -18,8 +18,8 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 .tagline{font-size:12px;color:var(--text3);letter-spacing:0.05em;line-height:1.6}
 .tagline span{color:var(--green2)}
-.tabs{display:flex;gap:2px;margin-bottom:1.5rem;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:4px}
-.tab{flex:1;font-family:'DM Mono',monospace;font-size:12px;padding:8px 4px;cursor:pointer;border:none;background:none;color:var(--text3);border-radius:7px;transition:all .2s;white-space:nowrap}
+.tabs{display:flex;gap:2px;margin-bottom:1.5rem;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:4px;overflow-x:auto}
+.tab{flex:1;font-family:'DM Mono',monospace;font-size:11px;padding:8px 4px;cursor:pointer;border:none;background:none;color:var(--text3);border-radius:7px;transition:all .2s;white-space:nowrap;min-width:fit-content}
 .tab:hover{color:var(--text2)}
 .tab.active{background:var(--bg3);color:var(--green);border:1px solid var(--border2);box-shadow:0 0 12px rgba(0,230,118,0.08)}
 .panel{display:none}
@@ -34,6 +34,11 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 textarea{width:100%;padding:12px;font-size:13px;font-family:'DM Mono',monospace;border:1px solid var(--border);border-radius:8px;background:var(--bg3);color:var(--text);resize:vertical;line-height:1.6}
 textarea:focus{outline:none;border-color:var(--green2);box-shadow:0 0 0 3px rgba(0,230,118,0.06)}
 textarea::placeholder{color:var(--text3)}
+input[type=text]{width:100%;padding:12px;font-size:13px;font-family:'DM Mono',monospace;border:1px solid var(--border);border-radius:8px;background:var(--bg3);color:var(--text);line-height:1.6}
+input[type=text]:focus{outline:none;border-color:var(--green2);box-shadow:0 0 0 3px rgba(0,230,118,0.06)}
+input[type=text]::placeholder{color:var(--text3)}
+select{width:100%;padding:12px;font-size:13px;font-family:'DM Mono',monospace;border:1px solid var(--border);border-radius:8px;background:var(--bg3);color:var(--text);cursor:pointer}
+select:focus{outline:none;border-color:var(--green2)}
 .btn{width:100%;padding:12px;font-size:13px;font-weight:700;font-family:'Syne',sans-serif;background:var(--green);color:#000;border:none;border-radius:8px;cursor:pointer;margin-top:12px;letter-spacing:0.08em;transition:all .2s}
 .btn:hover{background:var(--green3);box-shadow:0 0 20px rgba(0,230,118,0.3)}
 .btn:disabled{opacity:.3;cursor:not-allowed;box-shadow:none}
@@ -88,6 +93,12 @@ textarea::placeholder{color:var(--text3)}
 .login-btn{width:100%;padding:12px;font-size:13px;font-weight:700;font-family:'Syne',sans-serif;background:var(--green);color:#000;border:none;border-radius:8px;cursor:pointer;letter-spacing:0.08em;transition:all .2s;margin-top:4px}
 .login-btn:hover{background:var(--green3);box-shadow:0 0 20px rgba(0,230,118,0.3)}
 .login-note{font-size:11px;color:var(--text3);margin-top:1.25rem;line-height:1.6}
+.kit-section{background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:1rem;margin-bottom:1rem}
+.kit-section-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.kit-section-title::before{content:'//';color:var(--text3)}
+.kit-content{font-size:13px;color:var(--text2);line-height:1.8;white-space:pre-wrap}
+.copy-btn{font-size:10px;padding:3px 10px;border:1px solid var(--border2);border-radius:4px;background:transparent;color:var(--text3);cursor:pointer;font-family:'DM Mono',monospace;margin-top:8px;transition:all .15s}
+.copy-btn:hover{border-color:var(--green);color:var(--green)}
 </style>
 </head>
 <body>
@@ -112,8 +123,10 @@ textarea::placeholder{color:var(--text3)}
     <button class="tab active" onclick="switchTab('obiez')">Obiezioni</button>
     <button class="tab" onclick="switchTab('sim')">Simulatore</button>
     <button class="tab" onclick="switchTab('analisi')">Analisi</button>
+    <button class="tab" onclick="switchTab('kit')">Kit Vendita</button>
     <button class="tab" onclick="switchTab('profilo')">Profilo</button>
   </div>
+
   <div id="tab-obiez" class="panel active">
     <div class="card">
       <div class="label">Obiezioni frequenti</div>
@@ -151,6 +164,7 @@ textarea::placeholder{color:var(--text3)}
       <div class="sec-text" id="r-next"></div>
     </div>
   </div>
+
   <div id="tab-sim" class="panel">
     <div class="card" id="sim-setup">
       <div class="label">Tipo di cliente da simulare</div>
@@ -176,6 +190,7 @@ textarea::placeholder{color:var(--text3)}
       <button class="btn btn-sec" style="margin-top:10px" onclick="resetSim()">↩ NUOVA SIMULAZIONE</button>
     </div>
   </div>
+
   <div id="tab-analisi" class="panel">
     <div class="card">
       <div class="label">Come funziona</div>
@@ -190,6 +205,49 @@ textarea::placeholder{color:var(--text3)}
       <div class="res-text" id="call-resp"></div>
     </div>
   </div>
+
+  <div id="tab-kit" class="panel">
+    <div class="card">
+      <div class="label">Genera il tuo Kit di Vendita completo</div>
+      <div class="info-box">Inserisci 3 informazioni e l'AI genera in secondi: script cold call, email outreach, 10 obiezioni con risposte, e una follow-up sequence di 3 email.</div>
+      <div class="label">Cosa vendi?</div>
+      <input type="text" id="kit-product" placeholder="Es: software gestionale per ristoranti, integratori sportivi, servizi di pulizia...">
+      <div class="label" style="margin-top:12px">A chi lo vendi?</div>
+      <input type="text" id="kit-target" placeholder="Es: titolari di ristoranti, palestre, PMI manifatturiere...">
+      <div class="label" style="margin-top:12px">Tono preferito</div>
+      <div class="chips">
+        <div class="chip sel" id="tone-formale" onclick="selTone(this,'formale')">Formale</div>
+        <div class="chip" id="tone-diretto" onclick="selTone(this,'diretto')">Diretto</div>
+        <div class="chip" id="tone-consultivo" onclick="selTone(this,'consultivo')">Consultivo</div>
+      </div>
+      <button class="btn" id="kit-btn" onclick="generateKit()">→ GENERA KIT COMPLETO</button>
+    </div>
+    <div class="loading hidden" id="kit-load"><span class="dot">▮</span><span class="dot">▮</span><span class="dot">▮</span><span style="margin-left:8px">generando il tuo kit di vendita...</span></div>
+    <div class="hidden" id="kit-res">
+      <div class="kit-section">
+        <div class="kit-section-title">Script Cold Call</div>
+        <div class="kit-content" id="kit-coldcall"></div>
+        <button class="copy-btn" onclick="copySection('kit-coldcall')">COPIA</button>
+      </div>
+      <div class="kit-section">
+        <div class="kit-section-title">Email Cold Outreach</div>
+        <div class="kit-content" id="kit-email"></div>
+        <button class="copy-btn" onclick="copySection('kit-email')">COPIA</button>
+      </div>
+      <div class="kit-section">
+        <div class="kit-section-title">10 Obiezioni + Risposte</div>
+        <div class="kit-content" id="kit-obiezioni"></div>
+        <button class="copy-btn" onclick="copySection('kit-obiezioni')">COPIA</button>
+      </div>
+      <div class="kit-section">
+        <div class="kit-section-title">Follow-up Sequence (3 Email)</div>
+        <div class="kit-content" id="kit-followup"></div>
+        <button class="copy-btn" onclick="copySection('kit-followup')">COPIA</button>
+      </div>
+      <button class="btn btn-sec" style="margin-top:4px" onclick="resetKit()">↩ NUOVO KIT</button>
+    </div>
+  </div>
+
   <div id="tab-profilo" class="panel">
     <div class="card">
       <div class="sdots"><div class="sd active" id="sd1"></div><div class="sd" id="sd2"></div><div class="sd" id="sd3"></div></div>
@@ -235,11 +293,13 @@ textarea::placeholder{color:var(--text3)}
       <div style="font-size:12px;color:var(--text2);line-height:1.7" id="m-advice"></div>
     </div>
   </div>
+
   <div class="nota">IMPROVEMENT AI · €25/MESE · ELLIOTT · HORMOZI · DANG · MINER · BELFORT · CARDONE</div>
 </div>
 
 <script>
 const VALID_CODES=['IMP-2025-ALFA','IMP-2025-BETA','IMP-2025-GAMMA','IMP-2025-DELTA','IMP-2025-TEST'];
+let kitTone='formale';
 
 function doLogin(){
   const code=document.getElementById('login-input').value.trim().toUpperCase();
@@ -253,11 +313,7 @@ function doLogin(){
     setTimeout(()=>{document.getElementById('login-input').style.borderColor='';},2000);
   }
 }
-
-document.getElementById('login-input').addEventListener('keydown',function(e){
-  if(e.key==='Enter')doLogin();
-});
-
+document.getElementById('login-input').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
 window.addEventListener('load',function(){
   const saved=localStorage.getItem('imp_access');
   if(saved&&VALID_CODES.includes(saved)){
@@ -269,8 +325,9 @@ window.addEventListener('load',function(){
 const prof={tipo:'',stile:'',ticket:''};
 let simCtx='';
 let simHistory=[];
+
 function switchTab(id){
-  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['obiez','sim','analisi','profilo'][i]===id));
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['obiez','sim','analisi','kit','profilo'][i]===id));
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');
 }
@@ -278,6 +335,11 @@ function setObj(el,txt){
   document.getElementById('obj-input').value=txt;
   document.querySelectorAll('#tab-obiez .chip').forEach(c=>c.classList.remove('sel'));
   el.classList.add('sel');
+}
+function selTone(el,tone){
+  document.querySelectorAll('#tab-kit .chip').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  kitTone=tone;
 }
 function selSim(el,val){
   document.querySelectorAll('#chips-sim .chip').forEach(c=>c.classList.remove('sel'));
@@ -329,6 +391,49 @@ async function getObj(){
     res.classList.remove('hidden');
   }catch(e){alert('Errore. Riprova.');}
   finally{load.classList.add('hidden');btn.disabled=false;}
+}
+async function generateKit(){
+  const product=document.getElementById('kit-product').value.trim();
+  const target=document.getElementById('kit-target').value.trim();
+  if(!product||!target){alert('Inserisci cosa vendi e a chi.');return;}
+  const btn=document.getElementById('kit-btn');
+  const load=document.getElementById('kit-load');
+  const res=document.getElementById('kit-res');
+  btn.disabled=true;load.classList.remove('hidden');res.classList.add('hidden');
+  const prompt=`Sei un esperto di vendita B2B italiano con le tecniche di Elliott, Hormozi, Dang e Miner. Genera un kit di vendita completo per un venditore italiano che vende: "${product}" a: "${target}". Tono: ${kitTone}.
+
+Rispondi SOLO in JSON senza backtick con questa struttura esatta:
+{
+"coldcall": "script completo cold call di 150-200 parole, con apertura, proposta di valore, domanda di qualifica e chiusura per appuntamento",
+"email": "email cold outreach completa con oggetto, corpo e firma. Oggetto su prima riga con prefisso OGGETTO:",
+"obiezioni": "10 obiezioni numeriate con risposta per ognuna, formato: 1. OBIEZIONE: ... RISPOSTA: ...",
+"followup": "3 email di follow-up numerate con oggetto e corpo, inviate a distanza di 3-5 giorni l'una dall'altra"
+}`;
+  try{
+    const text=(await callAPI([{role:'user',content:prompt}],2000)).replace(/```json|```/g,'').trim();
+    const p=JSON.parse(text);
+    document.getElementById('kit-coldcall').textContent=p.coldcall;
+    document.getElementById('kit-email').textContent=p.email;
+    document.getElementById('kit-obiezioni').textContent=p.obiezioni;
+    document.getElementById('kit-followup').textContent=p.followup;
+    res.classList.remove('hidden');
+  }catch(e){alert('Errore. Riprova.');}
+  finally{load.classList.add('hidden');btn.disabled=false;}
+}
+function copySection(id){
+  const text=document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=event.target;
+    btn.textContent='COPIATO ✓';
+    btn.style.color='var(--green)';
+    setTimeout(()=>{btn.textContent='COPIA';btn.style.color='';},2000);
+  });
+}
+function resetKit(){
+  document.getElementById('kit-product').value='';
+  document.getElementById('kit-target').value='';
+  document.getElementById('kit-res').classList.add('hidden');
+  document.getElementById('kit-btn').disabled=false;
 }
 async function startSim(){
   if(!simCtx)return;
