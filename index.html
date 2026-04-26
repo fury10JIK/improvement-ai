@@ -400,22 +400,20 @@ async function generateKit(){
   const load=document.getElementById('kit-load');
   const res=document.getElementById('kit-res');
   btn.disabled=true;load.classList.remove('hidden');res.classList.add('hidden');
-  const prompt=`Sei un esperto di vendita B2B italiano con le tecniche di Elliott, Hormozi, Dang e Miner. Genera un kit di vendita completo per un venditore italiano che vende: "${product}" a: "${target}". Tono: ${kitTone}.
-
-Rispondi SOLO in JSON senza backtick con questa struttura esatta:
-{
-"coldcall": "script completo cold call di 150-200 parole, con apertura, proposta di valore, domanda di qualifica e chiusura per appuntamento",
-"email": "email cold outreach completa con oggetto, corpo e firma. Oggetto su prima riga con prefisso OGGETTO:",
-"obiezioni": "10 obiezioni numeriate con risposta per ognuna, formato: 1. OBIEZIONE: ... RISPOSTA: ...",
-"followup": "3 email di follow-up numerate con oggetto e corpo, inviate a distanza di 3-5 giorni l'una dall'altra"
-}`;
+  const ctx=`Prodotto: "${product}". Target: "${target}". Tono: ${kitTone}. Rispondi in italiano.`;
   try{
-    const text=(await callAPI([{role:'user',content:prompt}],2000)).replace(/```json|```/g,'').trim();
-    const p=JSON.parse(text);
-    document.getElementById('kit-coldcall').textContent=p.coldcall;
-    document.getElementById('kit-email').textContent=p.email;
-    document.getElementById('kit-obiezioni').textContent=p.obiezioni;
-    document.getElementById('kit-followup').textContent=p.followup;
+    const coldcall=await callAPI([{role:'user',content:`Sei un esperto di vendita B2B italiano. Scrivi uno script di cold call completo (150-200 parole) per un venditore che vende ${ctx} Includi: apertura, proposta di valore, domanda di qualifica e chiusura per appuntamento. Solo lo script, niente altro.`}],800);
+    document.getElementById('kit-coldcall').textContent=coldcall;
+
+    const email=await callAPI([{role:'user',content:`Sei un esperto di vendita B2B italiano. Scrivi una email di cold outreach completa per un venditore che vende ${ctx} Inizia con OGGETTO: sulla prima riga. Solo l'email, niente altro.`}],600);
+    document.getElementById('kit-email').textContent=email;
+
+    const obiezioni=await callAPI([{role:'user',content:`Sei un esperto di vendita B2B italiano con le tecniche di Elliott e Hormozi. Elenca 10 obiezioni comuni per chi vende ${ctx} Per ognuna scrivi la risposta. Formato: 1. OBIEZIONE: ... RISPOSTA: ...`}],1200);
+    document.getElementById('kit-obiezioni').textContent=obiezioni;
+
+    const followup=await callAPI([{role:'user',content:`Sei un esperto di vendita B2B italiano. Scrivi 3 email di follow-up per chi vende ${ctx} Distanziale di 3-5 giorni l'una dall'altra. Per ognuna scrivi OGGETTO: e il corpo. Solo le email, niente altro.`}],800);
+    document.getElementById('kit-followup').textContent=followup;
+
     res.classList.remove('hidden');
   }catch(e){alert('Errore. Riprova.');}
   finally{load.classList.add('hidden');btn.disabled=false;}
